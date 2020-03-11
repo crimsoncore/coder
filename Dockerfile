@@ -16,6 +16,7 @@ RUN apt-get update \
     sudo \
     vim \
     unzip \
+    byobu \
   && rm -rf /var/lib/apt/lists/*
 
 # https://wiki.debian.org/Locale#Manually
