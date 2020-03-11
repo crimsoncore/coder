@@ -36,7 +36,7 @@ RUN curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.
     printf "user: coder\ngroup: coder\n" > /etc/fixuid/config.yml
 
 #COPY release/code-server*.tar.gz /tmp/
-RUN cd /tmp && wget https://github.com/cdr/code-server/releases/download/2.1698/code-server2.1698-vsc1.41.1-linux-arm64.tar.gz 
+RUN cd /tmp && wget https://github.com/cdr/code-server/releases/download/2.1698/code-server2.1698-vsc1.41.1-linux-x86_64.tar.gz
 
 RUN cd /tmp && tar -xzf code-server*.tar.gz && rm code-server*.tar.gz && \
   mv code-server* /usr/local/lib/code-server && \
@@ -52,6 +52,7 @@ RUN apt-get install -y python3-pip
 RUN pip3 install --upgrade pip
 RUN python3 -V
 RUN pip --version
+RUN pip install docker
 RUN pip install azure-cli
 
 # Install Ansible
@@ -65,7 +66,7 @@ RUN set -x && \
     pip install ansible==${ANSIBLE_VERSION} && \
     \
     pip install pywinrm
-
+RUN apt-get install sshpass
 
 EXPOSE 8080
 USER coder
