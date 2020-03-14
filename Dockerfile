@@ -69,7 +69,10 @@ RUN set -x && \
     pip install pywinrm
 RUN apt-get install sshpass
 
-EXPOSE 8080
+# Install Jupyter
+RUN pip install notebook
+
+EXPOSE 8080, 8081
 USER coder
 WORKDIR /home/coder
 ENTRYPOINT ["dumb-init", "fixuid", "-q", "/usr/local/bin/code-server", "--host", "0.0.0.0", "."]
