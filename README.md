@@ -1,2 +1,2 @@
 # coder
-jumphost with coder and ansible and byobu
+jumphost with coder, ansible and byobu
