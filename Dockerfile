@@ -72,7 +72,7 @@ RUN apt-get install sshpass
 # Install Jupyter
 RUN pip install notebook
 
-EXPOSE 8080, 8081
+EXPOSE 8080 8081
 USER coder
 WORKDIR /home/coder
 ENTRYPOINT ["dumb-init", "fixuid", "-q", "/usr/local/bin/code-server", "--host", "0.0.0.0", "."]
