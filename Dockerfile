@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV ANSIBLE_VERSION 2.9.6
+ENV ANSIBLE_VERSION 2.7.10
 
 RUN apt-get update \
  && apt-get install -y \
