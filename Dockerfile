@@ -60,7 +60,7 @@ RUN wget https://releases.hashicorp.com/terraform/0.12.23/terraform_0.12.23_linu
     python3 -V && \ 
     pip --version && \ 
     pip install docker && \ 
-    pip install azure-cli && \ 
+    pip install azure-cli 
 
 # Install Ansible
 RUN set -x && \
