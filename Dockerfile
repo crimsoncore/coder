@@ -22,7 +22,6 @@ RUN apt-get update \
     unzip \
     byobu \
 # Terraform requirements
-    update \
     python3-pip \
 # Ansible requirement
     sshpass \
