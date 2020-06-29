@@ -2,6 +2,10 @@ FROM ubuntu:18.04
 
 ENV ANSIBLE_VERSION 2.9.6
 
+ENV LANG=en_US.UTF-8
+ENV SHELL=/bin/bash
+
+# Install coder
 RUN apt-get update \
  && apt-get install -y \
     curl \
@@ -17,18 +21,21 @@ RUN apt-get update \
     vim \
     unzip \
     byobu \
+# Terraform requirements
+    update \
+    python3-pip \
+# Ansible requirement
+    sshpass \
   && rm -rf /var/lib/apt/lists/*
 
 # https://wiki.debian.org/Locale#Manually
 RUN sed -i "s/# en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen \
   && locale-gen
-ENV LANG=en_US.UTF-8
 
 RUN chsh -s /bin/bash
-ENV SHELL=/bin/bash
 
 RUN adduser --gecos '' --disabled-password coder && \
-  echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+    echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
 RUN curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.4-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf - && \
     chown root:root /usr/local/bin/fixuid && \
@@ -37,24 +44,24 @@ RUN curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.
     printf "user: coder\ngroup: coder\n" > /etc/fixuid/config.yml
 
 #COPY release/code-server*.tar.gz /tmp/
-RUN cd /tmp && wget https://github.com/cdr/code-server/releases/download/2.1698/code-server2.1698-vsc1.41.1-linux-x86_64.tar.gz
+RUN cd /tmp && wget https://github.com/cdr/code-server/releases/download/v3.4.1/code-server-3.4.1-linux-amd64.tar.gz
 
-RUN cd /tmp && tar -xzf code-server*.tar.gz && rm code-server*.tar.gz && \
-  mv code-server* /usr/local/lib/code-server && \
-  ln -s /usr/local/lib/code-server/code-server /usr/local/bin/code-server
+RUN cd /tmp && \
+    tar -xzf code-server*.tar.gz && \
+    rm code-server*.tar.gz && \
+    mv code-server* /usr/local/lib/code-server && \
+    ln -s /usr/local/lib/code-server/code-server /usr/local/bin/code-server
 
 # Install Terraform
-RUN wget https://releases.hashicorp.com/terraform/0.12.23/terraform_0.12.23_linux_amd64.zip
-RUN unzip terraform_0.12.23_linux_amd64.zip
-RUN mv terraform /usr/local/bin/
-RUN terraform --version
-RUN apt-get update
-RUN apt-get install -y python3-pip
-RUN pip3 install --upgrade pip
-RUN python3 -V
-RUN pip --version
-RUN pip install docker
-RUN pip install azure-cli
+RUN wget https://releases.hashicorp.com/terraform/0.12.23/terraform_0.12.23_linux_amd64.zip && \ 
+    unzip terraform_0.12.23_linux_amd64.zip 
+    mv terraform /usr/local/bin/ && \ 
+    terraform --version && \ 
+    pip3 install --upgrade pip && \ 
+    python3 -V && \ 
+    pip --version && \ 
+    pip install docker && \ 
+    pip install azure-cli && \ 
 
 # Install Ansible
 RUN set -x && \
@@ -67,7 +74,6 @@ RUN set -x && \
     pip install ansible==${ANSIBLE_VERSION} && \
     \
     pip install pywinrm
-RUN apt-get install sshpass
 
 # Install Jupyter
 RUN pip install notebook
